@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>home page</title>
+	<link rel="stylesheet" type="text/css" href="stylesheet/home.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div>
+		<ul>
+  			<li><a class="activeyyy"></a></li>
+  			<li style="float:right"><a onclick="show_profile()" href="#">profile</a></li>
+  			<li style="float:right"><a href="contact.html">Contact</a></li>
+  			<li style="float:right"><a href="about.html">About</a></li>
+		</ul>
+	</div>
+	<div id="post">
+		<h3 id ="inform"></h3>
+		<button type="button" class="btn btn-warning btn-block" onclick="make_visible()">Search profile</button>
+		<button type="button" class="btn btn-primary btn-block" onclick="makepost()">Manage your rishta post here</button>
+		<button type="button" class="btn btn-success btn-block" onclick="agents()" >Aquire services of a rishta aunty</button>
+		<button type="button" class="btn btn-info btn-block" onclick="inbox_visible()">Check Inbox</button>
+		<div id="content">
+			<button style="float:right; margin:10px;"onclick="((function(){document.querySelector('#content').style.display='none'; newsfeed(); document.querySelector('#inform100').innerHTML=''; })())" type="button" class="btn btn-danger btn-sm">X</button>
+			<h3>Your rishta post will include the following information about you:<h3>
+			<div class='row'>
+				<div class="col-md-4">
+					<h3 id ="age">Age: </h3>
+					<h3 id ="rel">Religion: </h3>
+					<h3 id ="edu">Education: </h3>
+					<h3 id ="prof"r>Profession: </h3>
+				</div>
+				<div class="col-md-4">
+					<h3 id ="loc">Location: </h3>
+					<h3 id ="hei">Height: </h3>
+					<h3 id ="gender">Gender: </h3>
+					<h3 id ="status">Marital Status: </h3>
+				</div>
+			</div>
+	  		<input type="text" id="descr" name="descr" placeholder="Describe yourself here!" required><br>
+	  		<h3 id="inform100"><h3>
+	  		<button onclick="publish()" type="button" class="btn btn-success btn-sm">Publish Post</button>
+	  		<button onclick="stats()" type="button" class="btn btn-danger btn-sm">Post Stats</button>
+	  		<button style="visibility:hidden;" id ="rishta_win" onclick="delete_post()" type="button" class="btn btn-primary btn-sm">Rishta successfull</button>
+		</div>
+	</div>
+
+	<div id="agent">
+		<button style="float:right; margin:10px;"onclick="((function(){document.querySelector('#agent').style.display='none'; newsfeed(); document.querySelector('#inform212').innerHTML=''; })())" type="button" class="btn btn-danger btn-sm">X</button>
+		<h3 id = "inform212"></h3>
+		<h3>We have two types of rishta agents available</h3>
+		<h3>1. Basic aunty will find you a match with in 14 days in just $250</h3>
+		<h3>2. Experienced aunty will find you a match with in 7 days in just $500</h3>
+		<button onclick="get_aunty(0)" type="button" class="btn btn-success btn-sm">Hire Basic aunty</button>
+		<button onclick="get_aunty(1)" type="button" class="btn btn-primary btn-sm">Hire Experienced aunty</button>
+		<button id = "cancel123" onclick="delete_aunty()" style="visibility:hidden;" type="button" class="btn btn-primary btn-sm">Cancel services</button>
+	</div>
+
+	<div id="search">
+		<button style="float:right; margin:10px;"onclick="closely()" type="button" class="btn btn-danger btn-sm">X</button>
+		<h3 id="inform101"></h3>
+		<h3>Fill any one or multiple fields by which you want to search and then click submit</h3>
+		<div id="inner">
+			<input type="text" id="first_name" placeholder="First Name...">
+			<input type="text" id="last_name" placeholder="Last Name...">
+			<input type="text" id="age" placeholder="Age...">
+			<input type="text" id="religion" placeholder="Religion...">
+			<input type="text" id="education" placeholder="Education...">
+			<input type="text" id="profession" placeholder="Profession...">
+			<input type="text" id="location" placeholder="Location..."> 
+			<input type="text" id="gender" placeholder="Gender (male/female)..."> 
+			<input type="text" id="marital" placeholder="Marital (single/divorced)..."><br> 
+			<button type="button" onclick="SEARCH(this.parentNode)" class="btn btn-success btn-sm">Search</button>
+		</div>
+	</div>
+
+	<div class="inbox">
+		<button style="float:right; margin:5px;" onclick="((function(){document.querySelector('.inbox').style.display='none'; newsfeed();})())" type="button" class="btn btn-danger btn-sm">X</button><hr>
+		<h3 id="inform21"></h3>
+		<div class='row'>
+			<div class="col-md-4 names">
+				<h3><strong>Sender</strong></h3><hr>
+			</div>
+			<div class="col-md-8 messages">
+				<h3><strong>Messages</strong></h3><hr>
+			</div>
+		</div>
+	</div>
+
+	<div class="holder"></div>
+</body>
+</html>
+
+<script type="text/javascript">
+	var data = sessionStorage.getItem("user_data");
+	data = JSON.parse(data);
+	var temp = document.querySelector(".activeyyy");
+	temp.innerText = data.first_name +" "+ data.last_name ;
+	var id_focus = "";
+
+	function show_profile(){
+		window.location.replace("profile.html");	
+	}
+
+	function rishta_button(){
+		var temp = document.querySelector('#rishta_win');
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				if (xhttp.responseText != "NULL"){
+					temp.style.visibility="visible";
+				}
+				else
+				{
+					temp.style.visibility="hidden";
+				}
+			}
+		}
+		xhttp.open("GET", `http://localhost:8000/get_post?id=${data.id}`, true);
+		xhttp.send();
+	}
+
+	function makepost(){
+		rishta_button();
+		document.querySelector("#inform").innerHTML  = "<img src='loading.gif' alt='loading'>";
+
+		var a=document.querySelector("#age");
+		var b=document.querySelector("#gender");
+		var c=document.querySelector("#loc");
+		var d=document.querySelector("#prof");
+		var e=document.querySelector("#edu");
+		var f=document.querySelector("#hei");
+		var g=document.querySelector("#rel");
+		var h=document.querySelector("#status");
+
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+		       // Typical action to be performed when the document is ready:
+		var response = xhttp.responseText;
+		if(response !== "NULL")
+		    	{
+		     	response = JSON.parse(response);
+		     	a.innerText = "Age:"+" "+ response.age;
+		     	b.innerText = "Gender:"+" "+ data.gender;
+		     	c.innerText = "Location:"+" "+ response.location;
+		     	d.innerText = "Profession:"+" "+ response.profession;
+		     	e.innerText = "Education:"+" "+ response.education;
+		     	f.innerText = "Height:"+" "+ response.height;
+		     	g.innerText = "Religion:"+" "+ response.religion;
+		     	h.innerText = "Marital Status:"+" "+ response.marital;
+		     	
+		     	
+		     	document.querySelector("#inform").innerHTML = "";
+		     	document.querySelector(".holder").innerHTML = "";
+		     	document.querySelector("#content").style.display = "block";
+				document.querySelector(".inbox").style.display = "none";
+				document.querySelector('#search').style.display="none";
+				document.querySelector('#agent').style.display="none";
+		    	}
+		    else
+		    	{
+		    	 document.querySelector("#inform").innerHTML = "Go to the profile section to complete your About info first!";
+		    	}
+			}
+		}
+			
+			xhttp.open("GET", `http://localhost:8000/get_aboutinfo?id=${data.id}`, true);
+			xhttp.send();
+		}
+
+	function publish(){
+		var temp2 = document.querySelector('#rishta_win');
+		document.querySelector("#inform").innerHTML  = "<img src='loading.gif' alt='loading'>";
+		var temp = document.querySelector("#descr");
+		if (temp != "")
+		{
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+			       // Typical action to be performed when the document is ready:
+				document.querySelector("#inform").innerHTML = xhttp.responseText;
+				temp.value="";
+				temp2.style.visibility = "visible";
+				}
+			}
+			xhttp.open("POST", `http://localhost:8000/publish_post?id=${data.id}&bio=${temp.value}`, true);
+			xhttp.send();
+		}else{
+			document.querySelector("#inform").innerHTML  = "Please write your description in the input tag below!"
+		}
+
+	}
+
+
+	function newsfeed(){
+
+		document.querySelector("#inform").innerHTML  = "<img src='loading.gif' alt='loading'>";
+		var holder = document.querySelector(".holder");
+		holder.innerHTML = "";
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			    // Typical action to be performed when the document is ready:
+			    var data = xhttp.responseText;
+			    if (data!="NULL")
+			    {
+			    	var obj  = JSON.parse(data);
+			    	for (x of obj){
+			    		if(x.flag!=0){
+				    		var strng = "";
+				    		strng = strng + `
+							<div class="ads_feed">
+								<h4 style="float:right;">${x.id}</h4>`
+							if(x.value!=null){
+								strng = strng + `<span class="fa fa-star checked"></span>`.repeat(x.value);
+								if(5-x.value > 0){
+									strng = strng + `<span class="fa fa-star"></span>`.repeat(5-x.value);
+								}
+							}
+							else
+							{
+								strng = strng + `<span class="fa fa-star checked"></span>`.repeat(2);
+								strng = strng + `<span class="fa fa-star "></span>`.repeat(3);
+							}
+							strng = strng + `
+								<div class='row'>
+										<div class="col-md-6">
+											<h3><strong>Name: ${x.first_name} ${x.last_name}</strong></h3>
+											<h3>Age: ${x.age}</h3>
+											<h3>Religion: ${x.religion}</h3>
+											<h3>Education: ${x.education}</h3>
+											<h3>Profession: ${x.profession}</h3>
+										</div>
+										<div class="col-md-6">
+											<h3>Location: ${x.location}</h3>
+											<h3>Height: ${x.height}</h3>
+											<h3>Gender: ${x.gender}</h3>
+											<h3>Marital Status: ${x.marital}</h3>
+										</div>
+								</div>
+									<h3>Description: ${x.description}</h3>
+									<input type="text" placeholder="send a message...">
+									<i onmouseleave='useless(this,"0")' onmouseup='useless(this,"0")' onmousedown='useless(this,"1")' onclick="send_msg(this.parentNode)" class='far fa-paper-plane' style='font-size:36px;'></i>
+									<i onmouseup='useless(this,"0")' onmouseleave='useless(this,"0")' onmousedown='useless(this,"1")' onclick='react("love",this.parentNode)' class='far fa-heart' style='font-size:36px;color:red;margin-left:100px;'></i>
+									<i onmouseleave='useless(this,"0")' onmouseup='useless(this,"0")' onmousedown='useless(this,"1")'  onclick='react("thumbs",this.parentNode)' class='far fa-thumbs-up' style='font-size:36px;color:blue'></i>
+									<i onmouseleave='useless(this,"0")' onmouseup='useless(this,"0")' onmousedown='useless(this,"1")'  onclick='react("fire",this.parentNode)' class='fas fa-fire' style='font-size:36px;color:#f27d0c;'></i>
+									<button style="margin-top:13px" onclick="(()=>{this.nextSibling.nextSibling.style.display='block'})()"  type="button" class="btn btn-info btn-block">Rate profile</button>
+	  								<input style="display:none;" onmouseup="submit_rating(this.parentNode,this.value,this)"  type="range" min="0" max="5">
+	  								<button style="margin-top:3px" onclick="(()=>{this.nextSibling.nextSibling.style.display='block';this.nextSibling.nextSibling.nextSibling.nextSibling.style.display='block'})()"  type="button" class="btn btn-primary btn-block">Recommend profile</button>
+	  								<input style="display:none; width:100%; type="text" placeholder="Enter receiver email id">
+	  								<button style="margin-top:3px; display:none" onclick="send_mail(this.previousSibling.previousSibling,this.parentNode)"  type="button" class="btn btn-primary">submit</button>
+
+
+							</div>`
+							holder.innerHTML = holder.innerHTML + strng;
+						}
+			    	}
+			    	holder.innerHTML = holder.innerHTML + `<button style="margin-bottom:30px; margin-top: 30px; width:700px; margin-left:300px; margin-right:300px;" onclick="newsfeed()" type="button" class="btn btn-success btn-block">More Profiles</button>`;
+			    	document.querySelector("#inform").innerHTML="";
+			    }else
+			    {
+			    	document.querySelector("#inform").innerHTML="";
+			    }
+			}
+			}
+			xhttp.open("GET", `http://localhost:8000/random_posts`, true);
+			xhttp.send();
+
+	};
+	newsfeed();
+
+	function send_msg(parent){
+		var childs = parent.childNodes;
+		console.log(childs);
+		var rcvr_id = childs[1].innerText;
+		var msg = childs[12].value;
+		childs[12].value = "";
+
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			       // Typical action to be performed when the document is ready:
+				
+				var response = xhttp.responseText;
+				if (response != "NO MESSAGES!")
+				{
+						response = JSON.parse(response);
+						response = JSON.parse(response.messages);
+						if (`${data.id}` in response)
+						{
+							response[`${data.id}`] = response[`${data.id}`].concat([msg]);
+						}
+						else
+						{
+							response[`${data.id}`] = [msg];
+						}
+						
+				}
+				else
+				{
+					var sender_id = data.id;
+					response = {};
+					response[`${sender_id}`] = [msg];
+				}
+
+				response = JSON.stringify(response);
+
+				var xhttp2 = new XMLHttpRequest();
+				xhttp2.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					       // Typical action to be performed when the document is ready:
+					//document.querySelector("#inform").innerHTML = xhttp2.responseText;
+					}
+				}
+				xhttp2.open("POST", `http://localhost:8000/update_inbox?id=${rcvr_id}&msg=${response}`, true);
+				xhttp2.send();
+			}
+		}
+	
+			xhttp.open("GET", `http://localhost:8000/get_inbox?id=${rcvr_id}`, true);
+			xhttp.send();
+}
+
+function make_inbox(){
+
+	var temp =  document.querySelector(".names");
+	document.querySelector('#inform21').innerHTML = "<img src='loading.gif' alt='loading'>";
+	temp.innerHTML = "<h3><strong>Sender</strong></h3><hr>";
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+	if (this.readyState == 4 && this.status == 200) {
+			// Typical action to be performed when the document is ready:
+		var response = xhttp.responseText;
+		if (response != "NO MESSAGES!")
+			{
+				response = JSON.parse(response);
+				response = JSON.parse(response.messages);
+				for(key of Object.keys(response))
+				{
+					var xhttp2 = new XMLHttpRequest();
+					xhttp2.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+
+						var response2 = xhttp2.responseText;
+						response2 = JSON.parse(response2);
+			       		temp.innerHTML = temp.innerHTML + 
+			       		`<button onclick="display_msgs(this.nextSibling)" type="button" class="btn btn-primary btn-lg">${response2.first_name} ${response2.last_name}
+			       		</button><span style="visibility:hidden;">${key}</span><hr>`
+					
+						}
+					}
+					xhttp2.open("GET", `http://localhost:8000/name?id=${key}`, false);
+					xhttp2.send();
+
+				}
+				temp.innerHTML = temp.innerHTML + `<button onclick="refresh()" type="button" class="btn btn-success btn-sm"><i style="font-size:24px" class="fa">&#xf021;</i></button><hr>`
+				document.querySelector('#inform21').innerHTML = "";
+		
+			}
+			else{
+				document.querySelector('#inform21').innerHTML = "<strong>No Messages</strong>";
+			}
+
+				
+		}
+	}
+	
+			xhttp.open("GET", `http://localhost:8000/get_inbox?id=${data.id}`, true);
+			xhttp.send();
+}
+
+function display_msgs(node)
+{
+	var id = node.innerHTML;
+	id_focus = id;
+	var temp =  document.querySelector(".messages");
+	temp.innerHTML = `<h3><strong>Messages</strong></h3>`;
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+	if (this.readyState == 4 && this.status == 200) {
+			// Typical action to be performed when the document is ready:
+		var response = xhttp.responseText;
+		if (response != "NO MESSAGES!")
+			{
+				response = JSON.parse(response);
+				response = JSON.parse(response.messages);
+				for (x of response[id])
+				{
+					temp.innerHTML = temp.innerHTML + `<h3>${x}</h3>`;
+				}
+				temp.innerHTML = temp.innerHTML +`<input type="text" id="reply" name="reply" placeholder="Reply here!" required>
+				<button onclick="reply()" type="button" class="btn btn-warning btn-sm">SEND</button>`;
+		
+			}
+				
+		}
+	}
+	
+			xhttp.open("GET", `http://localhost:8000/get_inbox?id=${data.id}`, true);
+			xhttp.send();
+}
+function inbox_visible(){
+	document.querySelector('.holder').innerHTML="";
+	make_inbox();
+	document.querySelector('.inbox').style.display="block";
+	document.querySelector("#content").style.display = "none";
+	document.querySelector('#search').style.display="none";
+	document.querySelector('#agent').style.display="none";
+}
+
+function reply(){
+	var temp = document.querySelector("#reply");
+	var rcvr_id = id_focus;
+	var msg = temp.value;
+	temp.value = "";
+
+	if (msg != "")
+	{
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			       // Typical action to be performed when the document is ready:
+				
+				var response = xhttp.responseText;
+				if (response != "NO MESSAGES!")
+				{
+						response = JSON.parse(response);
+						response = JSON.parse(response.messages);
+						if (`${data.id}` in response)
+						{
+							response[`${data.id}`] = response[`${data.id}`].concat([msg]);
+						}
+						else
+						{
+							response[`${data.id}`] = [msg];
+						}
+						
+				}
+				else
+				{
+					var sender_id = data.id;
+					response = {};
+					response[`${sender_id}`] = [msg];
+				}
+
+				response = JSON.stringify(response);
+
+				var xhttp2 = new XMLHttpRequest();
+				xhttp2.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					       // Typical action to be performed when the document is ready:
+					//document.querySelector("#inform").innerHTML = xhttp2.responseText;
+					}
+				}
+				xhttp2.open("POST", `http://localhost:8000/update_inbox?id=${rcvr_id}&msg=${response}`, true);
+				xhttp2.send();
+			}
+		}
+	
+			xhttp.open("GET", `http://localhost:8000/get_inbox?id=${rcvr_id}`, true);
+			xhttp.send();	
+	}
+}
+function refresh(){
+	make_inbox();
+}
+
+function SEARCH(node){
+	document.querySelector("#inform101").innerHTML = "<img src='loading.gif' alt='loading'>";
+	var count =0;
+	var holder = document.querySelector(".holder");
+	holder.innerHTML = "";
+	tags = node.children;
+	url = "";
+	for(i=0;i<9;i++){
+		if(tags[i].value != ""){
+			url = url + `${tags[i].id}=${tags[i].value.toLowerCase()}&`;
+		}
+	}
+	url = url.slice(0,-1);
+	if(url!=""){
+		url = "http://localhost:8000/search?" + url;
+	}
+	
+	if(url!=""){
+
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			// Typical action to be performed when the document is ready:
+			var response = xhttp.responseText;
+			if(response == "NULL"){
+				document.querySelector("#inform101").innerHTML = "<strong>No records found!</strong>";
+			}
+			else{
+					var obj = JSON.parse(response);
+					holder.innerHTML = "<h3 style='margin-left:320px;'><strong>Search results are as follows:</strong></h3>";
+					for (x of obj){
+						if(x.flag != 0){
+							console.log(x.flag);
+							count = count +1;
+							var strng = "";
+				    		strng = strng+ `
+							<div class="ads_feed">
+								<h4 style="float:right;">${x.id}</h4>
+								`
+							if(x.value!=null){
+								strng = strng + `<span class="fa fa-star checked"></span>`.repeat(x.value);
+								if(5-x.value > 0){
+									strng = strng + `<span class="fa fa-star"></span>`.repeat(5-x.value);
+								}
+							}
+							else
+							{
+								strng = strng + `<span class="fa fa-star checked"></span>`.repeat(2);
+								strng = strng + `<span class="fa fa-star "></span>`.repeat(3);
+							}
+
+							strng = strng + `<div class='row'>
+										<div class="col-md-6">
+											<h3><strong>Name: ${x.first_name} ${x.last_name}</strong></h3>
+											<h3>Age: ${x.age}</h3>
+											<h3>Religion: ${x.religion}</h3>
+											<h3>Education: ${x.education}</h3>
+											<h3>Profession: ${x.profession}</h3>
+										</div>
+										<div class="col-md-6">
+											<h3>Location: ${x.location}</h3>
+											<h3>Height: ${x.height}</h3>
+											<h3>Gender: ${x.gender}</h3>
+											<h3>Marital Status: ${x.marital}</h3>
+										</div>
+								</div>
+									<h3>Email: ${x.email}</h3>
+									<input type="text" placeholder="send a message...">
+									<button onclick="send_msg(this.parentNode)" type="button" class="btn btn-warning btn-sm">SEND</button>
+									<button style="margin-top:13px" onclick="(()=>{this.nextSibling.nextSibling.style.display='block'})()"  type="button" class="btn btn-info btn-block">Rate profile</button>
+	  								<input style="display:none;" onmouseup="submit_rating(this.parentNode,this.value,this)"  type="range" min="0" max="5">
+							</div>`
+
+							holder.innerHTML = holder.innerHTML + strng;
+						}
+					}
+					if(count>0){
+						document.querySelector("#inform101").innerHTML = "<strong>scroll down to view results</strong>";
+					}else
+					{
+						holder.innerHTML = "";
+						document.querySelector("#inform101").innerHTML = "<strong>No records found!</strong>";
+					}
+				}
+				for(i=0;i<9;i++){
+					tags[i].value = "";
+				}
+		}
+	}
+		xhttp.open("GET",url, true);
+		xhttp.send();
+	}
+}
+function make_visible(node){
+	document.querySelector(".holder").innerHTML = "";
+	document.querySelector("#content").style.display = "none";
+	document.querySelector(".inbox").style.display = "none";
+	document.querySelector('#agent').style.display="none";
+	document.querySelector('#search').style.display="block";
+}
+function closely(){
+	document.querySelector(".holder").innerHTML = "";
+	newsfeed();
+	document.querySelector('#inform101').innerHTML='';
+	document.querySelector('#search').style.display='none';
+}
+
+function react(type,parent){
+	var childs = parent.childNodes;
+	var rcvr_id = childs[1].innerText;
+	console.log(type);
+
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+					    
+					}
+		}
+	xhttp.open("POST", `http://localhost:8000/update_react?id=${rcvr_id}&type=${type}`, true);
+	xhttp.send();
+}
+function stats(){
+	var temp = document.querySelector('#inform100');
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			var response = xhttp.responseText;
+			if(response=='NULL'){
+				temp.innerHTML="<strong>No reacts uptill now</strong>";
+			}
+			else
+			{
+				response = JSON.parse(response);
+				temp.innerHTML=`<strong>your post recieved ${response.love} loves, ${response.thumbs} thumbs up and ${response.fire} fire reacts</strong>`
+			}		    
+		}
+	}
+	xhttp.open("GET", `http://localhost:8000/get_react?id=${data.id}`, true);
+	xhttp.send();
+}
+function useless(node,type){
+	if(type=="1"){
+		node.style.fontSize="26px";
+	}else{
+		node.style.fontSize="36px";
+	}
+}
+function delete_post(){
+	var temp2 = document.querySelector('#rishta_win');
+	var temp = document.querySelector('#inform');
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			temp.innerHTML="<strong>Congratulations on finding your match!. Your rishta post has been removed</strong>";
+			temp2.style.visibility = "hidden";
+			window.scrollTo(0, 0);
+		}
+	}
+	xhttp.open("GET", `http://localhost:8000/delete_post?id=${data.id}`, true);
+	xhttp.send();
+}
+
+function submit_rating(parent,vale,tmp){
+		var childs = parent.childNodes;
+		var rcvr_id = childs[1].innerText;
+
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+		}
+	}
+	xhttp.open("POST", `http://localhost:8000/submit_rating?id=${rcvr_id}&val=${vale}`, true);
+	xhttp.send();
+}		
+
+function send_mail(node,parent){
+ 	   var childs = parent.childNodes;
+	   var rcvr_id = childs[1].innerText;
+	   var email = node.value;
+	   var full = data.first_name +" "+ data.last_name ;
+	   node.value="";
+	   node.style.display="none";
+	   node.nextSibling.nextSibling.style.display = "none";
+
+	   var xhttp = new XMLHttpRequest();
+	   xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+		}
+	 }
+	xhttp.open("get", `http://localhost:8000/send_email?name=${full}&id=${rcvr_id}&mail=${email}`, true);
+	xhttp.send();	
+	
+}
+function agents(){
+	document.querySelector(".holder").innerHTML = "";
+	document.querySelector("#content").style.display = "none";
+	document.querySelector(".inbox").style.display = "none";
+	document.querySelector('#search').style.display="none";
+	document.querySelector('#agent').style.display="block";
+}
+
+function get_aunty(type){
+	var temp2 = document.querySelector('#inform212');
+	var temp3 = document.querySelector('#cancel123');
+	var xhttp = new XMLHttpRequest();
+	var type1 = 0;
+	var type2 = 0;
+	if(type==0){
+		type1 = 1;
+	}
+	else{
+		type2 = 1;
+	}
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			var response = xhttp.responseText;
+			if(response !="Done"){
+				response = JSON.parse(response);
+				if (response.type1 == 1){
+					temp2.innerHTML = `<strong>You have already hired the services of a basic aunty</strong>`
+				}
+				else
+				{
+					temp2.innerHTML = `<strong>You have already hired the services of an tajarbakar aunty</strong>`
+				}
+			}else
+			{
+				temp2.innerHTML = `<strong>Your request have been lodged. A rishta aunty will contact you soon on your email or inbox and then you can mutually discuss on the pricing and requirements.</strong>`
+			
+			}
+			temp3.style.visibility='visible';
+		}
+	 }
+	xhttp.open("post", `http://localhost:8000/register_aunty?id=${data.id}&type1=${type1}&type2=${type2}`, true);
+	xhttp.send();	
+}
+
+function delete_aunty(){
+	var temp3 = document.querySelector('#cancel123');
+	var temp2 = document.querySelector('#inform212');
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			temp2.innerHTML = `<strong>Rishta aunty services have been removed.</strong>`
+			temp3.style.visibility="hidden";
+		}
+	 }
+	xhttp.open("get", `http://localhost:8000/delete_aunty?id=${data.id}`, true);
+	xhttp.send();	
+}
+</script>

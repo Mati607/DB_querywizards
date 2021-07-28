@@ -1,0 +1,140 @@
+#content{
+	display:none;
+	background-color: #e0ebeb;
+	border: 3px solid #333333;
+    font-size: 2.5rem;
+    margin-top:30px;
+    padding-left:10px;
+    border-radius: 2% 6% 5% 4% / 1% 1% 2% 4%;
+    text-transform: uppercase;
+    position: relative;
+}
+
+.checked {
+  color: orange;
+}
+
+i{
+	cursor: pointer;
+}
+#post
+{
+	margin-left:300px;
+	margin-top: 50px;
+	margin-right:300px;
+	width:700px;
+	
+}
+.ads_feed{
+	background-color: #e0ebeb;
+	margin-left:300px;
+	margin-top: 50px;
+	margin-right:300px;
+	width:700px;
+	padding:10px;
+	border: 3px solid #333333;
+    font-size: 2.5rem;
+    border-radius: 2% 6% 5% 4% / 1% 1% 2% 4%;
+    text-transform: uppercase;
+    position: relative;
+}
+#descr{
+		display: block;
+		border: 2px solid black;
+		border-radius: 5px;
+		width:100%;
+		height:40px;
+		border-color: #0000ae;
+	}
+
+ul {
+	  list-style-type: none;
+	  margin: 0;
+	  padding: 0;
+	  overflow: hidden;
+	  background-color: #333;
+	  height:57px;
+	}
+
+	li {
+	  float: left;
+	  border-right: 1px solid #bbb;
+	}
+	li:first-child {
+  	border-right: none;
+	}
+
+	li a {
+	  display: block;
+	  color: white;
+	  text-align: center;
+	  padding: 18px 16px;
+	  text-decoration: none;
+	  height:57px;
+	}
+
+	/* Change the link color to #111 (black) on hover */
+	li a:hover:not(.activeyyy) {
+	  background-color: #111;
+	}
+
+	.activeyyy{
+	  background-color: #4CAF50;
+	}
+
+input{
+		margin-left: 50px;
+		margin-right: 50px;
+		border: 2px solid black;
+		border-radius: 5px;
+		width: 50%;
+		height: 35px;
+		border-color: #0000ae;
+	}
+
+.inbox{
+	display:none;
+	background-color: #e0ebeb;
+	margin-left:300px;
+	margin-top: 50px;
+	margin-right:300px;
+	width:700px;
+	padding:10px;
+	border: 3px solid #333333;
+    font-size: 2.5rem;
+    border-radius: 2% 6% 5% 4% / 1% 1% 2% 4%;
+    text-transform: uppercase;
+    position: relative;
+}
+#search	{
+	display:none;
+	background-color: #e0ebeb;
+	margin-left:300px;
+	margin-top: 50px;
+	margin-right:300px;
+	width:700px;
+	padding:10px;
+	border: 3px solid #333333;
+    font-size: 2.5rem;
+    border-radius: 2% 6% 5% 4% / 1% 1% 2% 4%;
+    position: relative;
+}
+
+#agent{
+	display:none;
+	background-color: #e0ebeb;
+	margin-left:300px;
+	margin-top: 50px;
+	margin-right:300px;
+	width:700px;
+	padding:10px;
+	border: 3px solid #333333;
+    font-size: 2.5rem;
+    border-radius: 2% 6% 5% 4% / 1% 1% 2% 4%;
+    position: relative;
+}
+#inner{
+	margin-left:20px;
+	margin-top:30px;
+}
+

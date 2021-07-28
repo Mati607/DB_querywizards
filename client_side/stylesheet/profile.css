@@ -1,0 +1,87 @@
+input{
+		display: block;
+		margin-left: 50px;
+		margin-right: 50px;
+		border: 2px solid black;
+		border-radius: 5px;
+		width: 350px;
+		height: 30px;
+		border-color: #0000ae;
+	}
+	button
+	{
+		border: 2px solid black;
+		border-radius: 5px;
+		border-color: #0000ae;
+		padding: 5px;
+	}
+	body{
+		background-color:#ffcccc;
+	}
+	#view{
+		visibility:visible;
+		background-color:#c2d6d6;
+		position:absolute;
+		left:25%;
+		top:20%;
+		padding:60px;
+		padding-top:10px;
+		border: 2px solid black;
+		border-radius: 30px;
+
+	}
+	#change_profile{
+		visibility:hidden;
+		background-color:#c2d6d6;
+		position:absolute;
+		left:25%;
+		top:20%;
+		padding:60px;
+		padding-top:10px;
+		border: 2px solid black;
+		border-radius: 30px;
+	}
+	#change_password{
+		visibility:hidden;
+		background-color:#c2d6d6;
+		position:absolute;
+		left:25%;
+		top:20%;
+		padding:60px;
+		padding-top:10px;
+		border: 2px solid black;
+		border-radius: 30px;
+	}
+	#delete_account{
+		visibility:hidden;
+		background-color:#c2d6d6;
+		position:absolute;
+		left:25%;
+		top:20%;
+		padding:60px;
+		padding-top:10px;
+		border: 2px solid black;
+		border-radius: 30px;
+	}
+	#about_info{
+		visibility:hidden;
+		background-color:#c2d6d6;
+		position:absolute;
+		left:25%;
+		top:20%;
+		padding:60px;
+		padding-top:10px;
+		border: 2px solid black;
+		border-radius: 30px;
+	}
+	#privacy{
+		visibility:hidden;
+		background-color:#c2d6d6;
+		position:absolute;
+		left:25%;
+		top:20%;
+		padding:60px;
+		padding-top:10px;
+		border: 2px solid black;
+		border-radius: 30px;
+	}

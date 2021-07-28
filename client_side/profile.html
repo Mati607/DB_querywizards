@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<head>
+	<title>profile page</title>
+	<link rel="stylesheet" type="text/css" href="stylesheet/profile.css">
+</head>
+<body>
+	<div id ="view">
+		<h2>Your profile information</h2>
+		<h3 id =fname>First Name: </h3>
+		<h3 id =lname>Last Name: </h3>
+		<h3 id =email>Email: </h3>
+		<h3 id =gender>Gender: </h3>
+		<button onclick="change_layout(0)">Update profile</button>
+		<button onclick="change_layout(1)">change password</button>
+		<button onclick="change_layout(2)">deactivate profile</button><br><br>
+		<button onclick="change_layout(3)">Edit About info</button>
+		<button onclick="change_layout(4)">privacy setting</button>
+		<button onclick="window.location.replace('homepage.html')">back</button>
+		<button onclick="logout()">Log out</button>
+	</div>
+	<div id ="change_profile">
+		<h3>Type new profile data below</h3>
+		<label for="fname1">First name:</label><br>
+	  	<input type="text" id="fname1" name="fname1" required><br>
+	  	<label for="lname1">Last name:</label><br>
+	  	<input type="text" id="lname1" name="lname1" required><br>
+	  	<button onclick="c_profile()">Submit</button>
+	  	<button onclick="location.reload()">Back</button>
+	  	<h2 id="inform1"></h2>	
+	 </div>
+	 <div id= "change_password">
+	 	<h2> password change</h2>
+	 	<label for="pswrd0">Old Password:</label><br>
+	  	<input type="Password" id="pswrd0" name="pswrd0" required><br>
+	  	<label for="pswrd">New Password:</label><br>
+	  	<input type="Password" id="pswrd" name="pswrd" required><br>
+	  	<button onclick="c_password()">Submit</button>
+	  	<button onclick="location.reload()">Back</button>
+	  	<h2 id="inform2"></h2>
+	 </div>
+	  <div id= "delete_account">
+	  	<h2>Delete account</h2>
+	  	<label for="mail1">Email:</label><br>
+	  	<input type="email" id="mail1" name="mail1" required><br>
+	 	<label for="pswrd1">Password:</label><br>
+	  	<input type="Password" id="pswrd1" name="pswrd1" required><br>
+	  	<button onclick="p_delete()">delete account</button>
+	  	<button onclick="location.reload()">Back</button>
+	  	<h2 id="inform3"></h2>	
+	 </div>
+	 <div id ="about_info">
+		<h3>Type about info below</h3>
+		<label for="age">Age:</label><br>
+	  	<input type="text" id="age" name="age" required><br>
+	  	<label for="rel">Religion:</label><br>
+	  	<input type="text" id="rel" name="rel" required><br>
+	  	<label for="edu">Education:</label><br>
+	  	<input type="text" id="edu" name="edu" required><br>
+	  	<label for="loc">Location:</label><br>
+	  	<input type="text" id="loc" name="loc" required><br>
+	  	<label for="hei">Height:</label><br>
+	  	<input type="text" id="hei" name="hei" required><br>
+	  	<label for="prof">profession:</label><br>
+	  	<input type="text" id="prof" name="prof" required><br>
+	  	<label for="status">Marital status:</label><br>
+	  	<input type="text" id="status" name="status" placeholder="Single / Divorced..." required><br>
+	  	<button onclick="aboutinfo()">Submit</button>
+	  	<button onclick="location.reload()">Back</button>
+	  	<h2 id="inform4"></h2>	
+	 </div>
+	 <div id ="privacy">
+	  		<h3 id = "inform5"></h3>
+	  		<button onclick="location.reload()">Back</button>
+	  		<button onclick="privacy_ch(0)">Turn privacy on</button>
+	  		<button onclick="privacy_ch(1)">Turn privacy off</button>
+	 </div>
+</body>
+
+</html>
+
+
+<script type="text/javascript">
+	var data = data = sessionStorage.getItem("user_data");
+	data = JSON.parse(data);
+	var temp1 = document.querySelector("#fname");
+	var temp2 = document.querySelector("#lname");
+	var temp3 = document.querySelector("#email");
+	var temp4 = document.querySelector("#gender");
+	temp1.innerText = temp1.innerText +" "+ data.first_name ;	
+	temp2.innerText = temp2.innerText +" "+ data.last_name ;	
+	temp3.innerText = temp3.innerText +" "+ data.email ;	
+	temp4.innerText = temp4.innerText +" "+ data.gender ;	
+
+	function change_layout(x){
+		if(x==0){
+			var x = document.querySelector("#view");
+			var y = document.querySelector("#change_profile");
+			x.style.visibility = "hidden";
+			y.style.visibility = "visible";
+			
+		}
+		if(x==1){
+			var x = document.querySelector("#view");
+			var y = document.querySelector("#change_password");
+			x.style.visibility = "hidden";
+			y.style.visibility = "visible";
+			
+		}
+		if(x==2){
+			var x = document.querySelector("#view");
+			var y = document.querySelector("#delete_account");
+			x.style.visibility = "hidden";
+			y.style.visibility = "visible";
+			
+		}
+		if(x==3){
+			var x = document.querySelector("#view");
+			var y = document.querySelector("#about_info");
+			x.style.visibility = "hidden";
+			y.style.visibility = "visible";
+			
+		}
+		if(x==4){
+			var x = document.querySelector("#view");
+			var y = document.querySelector("#privacy");
+			x.style.visibility = "hidden";
+			y.style.visibility = "visible";
+			
+		}
+	}
+	function c_profile(){
+
+		var k = document.querySelector("#inform1");
+
+		var first = document.querySelector("#fname1");
+		var last = document.querySelector("#lname1");
+
+		if ((first.value != "") && (last.value != "")){
+
+			k.innerHTML = "<img src='loading.gif' alt='loading'>"
+
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+		    if (this.readyState == 4 && this.status == 200) {
+		       // Typical action to be performed when the document is ready:
+		       var response = xhttp.responseText;
+		       document.querySelector("#inform1").innerHTML = response;
+		       if(response == "Account updated!"){
+			       data.first_name = first.value;
+			       data.last_name = last.value;
+			       sessionStorage.setItem("user_data", JSON.stringify(data));
+			       first.value = "";
+			       last.value = "";
+				}
+		    }
+			};
+			xhttp.open("GET", `http://localhost:8000/change_profile?id=${data.id}&first=${first.value}&last=${last.value}`, true);
+			xhttp.send();
+
+		}
+
+	}
+
+	function privacy_ch(val){
+		var temp = document.querySelector('#inform5');
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				
+				if(val == 0){
+						temp.innerHTML = "<strong>Your profile info is currently hidden</strong>"
+					}else
+					{
+						temp.innerHTML = "<strong>Your profile info is currently public</strong>"
+					}
+				
+			}
+		}
+		xhttp.open("POST", `http://localhost:8000/update_privacy?id=${data.id}&flag=${val}`, true);
+		xhttp.send();
+	}
+
+
+	function privacy_setting(){
+		var temp = document.querySelector('#inform5');
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				if(xhttp.responseText == "NULL"){
+					temp.innerHTML = "<strong>Your profile info is currently public</strong>"
+				}
+				else{
+					response = JSON.parse(xhttp.responseText);
+					if(response.flag == 0){
+						temp.innerHTML = "<strong>Your profile info is currently hidden</strong>"
+					}else
+					{
+						temp.innerHTML = "<strong>Your profile info is currently public</strong>"
+					}
+				}
+			}
+		}
+		xhttp.open("GET", `http://localhost:8000/privacy?id=${data.id}`, true);
+		xhttp.send();
+	}
+	privacy_setting();
+	function c_password(){
+
+		var k = document.querySelector("#inform2");
+
+		var pswrd = document.querySelector("#pswrd");
+		var pswrd2 = document.querySelector("#pswrd0");
+
+		if((pswrd.value != "") && (pswrd2.value == data.password)){
+
+			k.innerHTML = "<img src='loading.gif' alt='loading'>"
+
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+		    if (this.readyState == 4 && this.status == 200) {
+		       // Typical action to be performed when the document is ready:
+		       var response = xhttp.responseText;
+		       document.querySelector("#inform2").innerHTML = xhttp.responseText;
+		       if(response=="Password updated!"){
+		       	   data.password = pswrd.value;
+			       sessionStorage.setItem("user_data", JSON.stringify(data));
+		       }
+		       pswrd.value = "";
+		       pswrd2.value = "";
+		    }
+			};
+			xhttp.open("GET", `http://localhost:8000/change_password?id=${data.id}&password=${pswrd.value}`, true);
+			xhttp.send();
+		}else
+		{
+			document.querySelector("#inform2").innerHTML = "Incorrect password!";
+			pswrd.value = "";
+		    pswrd2.value = "";
+		}
+	}
+
+	function p_delete(){
+		var mail = document.querySelector("#mail1");
+		var pswrd = document.querySelector("#pswrd1");
+
+		var k = document.querySelector("#inform3");
+
+		if ((mail.value == data.email) && (pswrd.value == data.password)){
+
+			k.innerHTML = "<img src='loading.gif' alt='loading'>"
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+		    if (this.readyState == 4 && this.status == 200) {
+		       // Typical action to be performed when the document is ready:
+		      sessionStorage.removeItem("user_data"); 
+		      window.location.replace("login.html");	
+		    }
+			};
+			xhttp.open("GET", `http://localhost:8000/delete_user?id=${data.id}`, true);
+			xhttp.send();
+
+		}else
+		{
+			document.querySelector("#inform3").innerHTML = "Invalid ID or Password";
+			mail.value="";
+			pswrd.value="";
+		}
+	}
+
+	function logout(){
+		sessionStorage.removeItem("user_data"); 
+		window.location.replace('login.html')
+	}
+
+
+	function aboutinfo(){
+		var age = document.querySelector("#age");
+		var rel = document.querySelector("#rel");
+		var edu = document.querySelector("#edu");
+		var loc = document.querySelector("#loc");
+		var status = document.querySelector("#status");
+		var prof= document.querySelector("#prof");
+		var hei= document.querySelector("#hei");
+		var k = document.querySelector("#inform4");
+
+		if ((age.value != "") && (rel.value != "")&& (edu.value != "")&& (loc.value != "")&& (status.value != "")&& (prof.value != "")&& (hei.value != ""))
+		{
+			k.innerHTML = "<img src='loading.gif' alt='loading'>"
+
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+		    if (this.readyState == 4 && this.status == 200) {
+		       // Typical action to be performed when the document is ready:
+		       var response = xhttp.responseText;
+		       document.querySelector("#inform4").innerHTML = response;
+		       age.value = "";
+		       rel.value = "";
+		       edu.value = "";
+		       loc.value = "";
+		       status.value = "";
+		       prof.value = "";
+		       hei.value = "";
+
+		    }
+			};
+			xhttp.open("POST", `http://localhost:8000/update_aboutinfo?
+				id=${data.id}
+				&age=${age.value}
+				&rel=${rel.value}
+				&edu=${edu.value}
+				&loc=${loc.value}
+				&status=${status.value}
+				&prof=${prof.value}
+				&hei=${hei.value}`, true);
+			xhttp.send();
+		}
+	}
+</script>

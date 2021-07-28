@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<script type="text/javascript">
+	function wakeup(){
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {}
+			};
+		xhttp.open("GET", `http://localhost:8000/`, true);
+		xhttp.send();
+	}
+	wakeup();
+</script>
+<html>
+<head>
+	<title>RISHTA APP</title>
+</head>
+<body id="main">
+	<div id = "register">
+	  	<label for="fname">First name:</label><br>
+	  	<input type="text" id="fname" name="fname" required><br>
+	  	<label for="lname">Last name:</label><br>
+	  	<input type="text" id="lname" name="lname" required><br>
+	  	<label for="gender">Gender:</label><br>
+	  	<input type="text" id="gender" name="gender" required><br>
+	  	<label for="mail">Email:</label><br>
+	  	<input type="email" id="mail" name="mail" required><br>
+	  	<label for="pswrd">Password:</label><br>
+	  	<input type="Password" id="pswrd" name="pswrd" required><br>
+	  	<button onclick="make_account()">Register</button>
+	  	<button onclick="location.reload()">back</button>
+	  	<h3 id='inform1'></h3>
+	</div>
+	<div id = "login">
+	  	<label for="mail">Email:</label><br>
+	  	<input type="email" id="lmail" name="mail" required><br>
+	  	<label for="pswrd">Password:</label><br>
+	  	<input type="password" id="lpswrd" name="pswrd" required><br><br>
+	  	<button onclick='do_login()'>Log in</button><br>
+	</div>
+	<button id="custom" onclick="change_layout()">Sign up</button>
+	<h3 id='inform'></h3>
+</body>
+</html>
+
+<style type="text/css">
+	#register
+	{
+		visibility: hidden;
+		position: absolute;
+		left: 30%;
+		top:20%;
+		width:50%;
+	}
+	body{
+		background-image: url("rose-cmprs.png");
+		color:white;
+  		background-size: cover;
+
+
+	}
+	#login
+	{	
+		visibility: visible;
+		position: absolute;
+		left: 30%;
+		top: 20%;
+		width:50%;
+	}
+	input{
+		display: block;
+		margin-left: 50px;
+		margin-right: 50px;
+		border: 2px solid black;
+		border-radius: 5px;
+		width: 50%;
+		height: 35px;
+		border-color: #0000ae;
+	}
+	button
+	{
+		width: 110px;
+		border: 2px solid black;
+		border-radius: 5px;
+		height: 35px;
+		border-color: #0000ae;
+	}
+	#custom
+	{
+		position: absolute;
+		left: 30%;
+		top: 58%;
+		width:110px;
+
+	}
+	#inform{
+		position:absolute;
+		top:45%;
+		left:45%;
+	}
+
+</style>
+
+<script type="text/javascript">
+	function change_layout(){
+		var x = document.querySelector("#register");
+		var z = document.querySelector("#inform");
+		var y = document.querySelector("#login");
+		var btn = document.querySelector("#custom");
+		x.style.visibility = "visible";
+		y.style.visibility = "hidden";
+		btn.style.visibility = "hidden";
+		z.style.visibility = "hidden";
+	}
+
+	function make_account(){
+		var k = document.querySelector("#inform1");
+		var first = document.querySelector("#fname");
+		var last = document.querySelector("#lname");
+		var gender = document.querySelector("#gender");
+		var mail = document.querySelector("#mail");
+		var pswrd = document.querySelector("#pswrd");
+		var less = gender.value.toLowerCase();
+
+		if ((less=="male" || less=="female") && (first.value != "") && (last.value != "") && (gender.value != "") && (mail.value != "") && (pswrd.value != "")){
+			k.innerHTML = "<img src='loading2.gif' alt='loading'>"
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+		    if (this.readyState == 4 && this.status == 200) {
+		       // Typical action to be performed when the document is ready:
+		       document.querySelector("#inform1").innerHTML = xhttp.responseText;
+		       first.value = "";
+		       last.value = "";
+		       gender.value = "";
+		       mail.value = "";
+		       pswrd.value = "";
+		    }
+			};
+			xhttp.open("POST", `http://localhost:8000/register?
+						first=${first.value}&
+						last=${last.value}&
+						gender=${gender.value}&
+						email=${mail.value}&
+						password=${pswrd.value}`, true);
+			xhttp.send();
+
+		}else{
+			document.querySelector("#inform1").innerHTML = "<strong>Please enter valid data!</strong>";
+			first.value = "";
+		    last.value = "";
+		    gender.value = "";
+		    mail.value = "";
+		    pswrd.value = "";
+		}
+	}
+	function do_login()
+	{
+		var k = document.querySelector("#inform");
+		var mail = document.querySelector("#lmail");
+		var pswrd = document.querySelector("#lpswrd");
+		if ((mail.value != "") && (pswrd.value != "")){
+
+			k.innerHTML = "<img src='loading2.gif' alt='loading'>"
+
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+		    if (this.readyState == 4 && this.status == 200) {
+		       // Typical action to be performed when the document is ready:
+		       var response = xhttp.responseText;
+		       if(response !== "NULL")
+		       {
+		       	response = JSON.parse(response)[0];
+		       	sessionStorage.setItem("user_data", JSON.stringify(response));
+		       	window.location.replace("homepage.html");
+		       }
+		       else
+		      	{
+		      		document.querySelector("#inform").innerHTML = "Invalid Id or password";
+		      		mail.value = "";
+		      		pswrd.value = "";
+		      	}
+		    }
+			};
+			xhttp.open("GET", `http://localhost:8000/login?email=${mail.value}&password=${pswrd.value}`, true);
+			xhttp.send();
+
+		}
+
+	}
+</script>
